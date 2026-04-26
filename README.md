@@ -140,8 +140,9 @@ The repository includes `.env.example` and `.streamlit/secrets.toml.example` onl
 
 ## What I would improve next
 
-1. Save interview sessions.
-2. Add a download button for the feedback history.
-3. Add a clearer dashboard of scores over time.
-4. Add model-specific fallback handling.
-5. Add a stronger safety checker before sending text to the main model.
+1. Save interview sessions so users can return to previous practice rounds instead of losing everything after the browser session ends.
+2. Add a download button for feedback history so the user can review weak areas after the interview.
+3. Add a score dashboard to show progress across relevance, clarity, and depth over time.
+4. Improve model fallback logic so the app can automatically switch to a backup model if one provider is rate-limited or unavailable.
+5. Add stronger safety checks for prompt injection and unsafe inputs, because the current protection catches obvious cases but is not production-grade.
+6. Split the code into smaller files such as `app.py`, `prompts.py`, `validation.py`, and `ui.py` if the app grows further.
