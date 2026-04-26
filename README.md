@@ -1,4 +1,4 @@
-# AI interview practice app
+# AI Interview Practice App
 
 A Streamlit app for role-specific interview practice with automatic feedback after every submitted answer.
 
