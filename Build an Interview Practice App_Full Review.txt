@@ -1,0 +1,28 @@
+Build an Interview Practice App
+
+What was done well
+
+- The system and judge prompts both wrap the job description and the candidate answer in clearly labelled fences and tell the model to treat that content as data rather than as instructions, which is the correct mitigation pattern for the OWASP LLM01 prompt injection category.
+
+- The application was deployed to Streamlit.
+
+- The five prompt techniques are distinct in their framing and output shape rather than five rephrasings of the same instruction, which meets the task requirement on prompt techniques.
+
+- Input validation runs before any model call, so obviously empty, too short, too long, or duplicated submissions are rejected without spending API credit.
+
+- The README documents the limitations honestly
+
+What could be improved
+
+- There is no rate limiting anywhere in app.py, so a user or an accidental double-click can fire call_openrouter as fast as Streamlit reruns; this is the OWASP LLM10 Unbounded Consumption category, and at minimum you should track the last submit timestamp and a request count in session state and reject submits that exceed a threshold, more about it: https://genai.owasp.org/llmrisk/llm10-unbounded-consumption/
+
+- looks_like_prompt_injection is an English only regex denylist and will miss translations, leet style obfuscation, zero width characters, and ordinary paraphrases of the same intent, which OWASP explicitly calls out as the obfuscation bypass class, replace or supplement it with a real moderation classifier and gate on category scores rather than substring matches, one of my most common recommendations: https://docs.mistral.ai/models/model-cards/mistral-moderation-26-03
+
+- There are no tests at all, the pure functions are exactly the units that have edge case bugs and are trivial to cover with parametrized cases (https://docs.pytest.org/en/stable/how-to/parametrize.html).
+
+- The single long app.py mixes config, prompts, validation, the HTTP client, and the Streamlit UI in one module, split into one module for prompts and prompt building, one for validation and safety helpers, one for the OpenRouter client and error mapping, and one for the UI itself, which the README already flags as a planned improvement, reference: https://docs.python-guide.org/writing/structure/.
+
+- There is no logging at all, the UI error path tells the user what failed but nothing is recorded for post mortem, so add structured logging to stdout that captures model, status code, latency, and prompt injection hits so for e.g Streamlit Cloud log viewer (or any aggregator) has something to work with (https://www.structlog.org/en/stable/logging-best-practices.html).
+
+- The dependency file uses lower-bound-only pins, which means a future major release of any listed package could break the app silently on a fresh install, move project metadata and dependencies into pyproject.toml with uv and commit the lockfile so installs are reproducible across environments and contributors, for reference: https://docs.astral.sh/uv/guides/projects/.
+
