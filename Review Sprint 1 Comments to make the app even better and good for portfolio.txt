@@ -1,3 +1,30 @@
+Add simple session-level rate limiting
+Most urgent because it protects your tokens and prevents someone from repeatedly clicking buttons to trigger many API calls.
+Disable the button while a request is running
+Prevents accidental double-clicks and duplicate API calls during loading.
+
+Add unit tests
+Test the important logic separately from the UI, especially:
+
+input validation
+prompt-injection detection
+duplicate-answer detection
+score extraction
+feedback color mapping
+
+This would make the app more reliable and easier to refactor.
+
+Move prompts into prompts.py
+Keeps prompt logic separate from the main Streamlit app and makes the code easier to maintain.
+Add a moderation pre-check
+Use something like Mistral Moderation 2 before sending risky user inputs to the main model, especially for multilingual jailbreak/prompt-injection detection.
+Add speech-to-text
+Useful product improvement because this is an interview app. Voice answers would make the practice feel more realistic.
+
+
+
+
+
 That is an excellent review outcome. More importantly, the feedback he gave is exactly the kind of feedback a strong engineer would give: **your app works, but now you need to think about abuse, scalability, moderation, voice UX, and code structure.**
 
 Here is how I would frame what happened and what you should do next.
